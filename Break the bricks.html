@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>打砖块游戏</title>
+        <style>
+            *{margin: 0px;padding: 0px;}
+            #main{width: 540px;height: 550px;border: 1px solid black;margin: 0px auto;position: relative;}
+            #ball{width: 20px;height: 20px;border-radius: 50%;background-color: red;position: absolute;left:260px;top:500px}
+            #bat{width: 100px;height: 30px;background-color: blue;position: absolute;top:520px;left: 220px;}
+            #brick div{width: 88px;height: 18px;border: 1px solid black;float: left;}
+        </style>
+        <script>
+            function randomColor() {
+                var a=parseInt(Math.random()*256);
+                var b=parseInt(Math.random()*256);
+                var c=parseInt(Math.random()*256);
+                return "rgba("+a+","+b+","+c+",1)";
+            }
+            function getStyle(node,attr){
+                return node.currentStyle?node.currentStyle(attr):getComputedStyle(node)[attr];
+            }
+            function knock(node1,node2){
+                var l1=node1.offsetLeft;
+                var r1=node1.offsetLeft+node1.offsetWidth;
+                var t1=node1.offsetTop;
+                var b1=node1.offsetTop+node1.offsetHeight;
+                var l2=node2.offsetLeft;
+                var r2=node2.offsetLeft+node2.offsetWidth;
+                var t2=node2.offsetTop;
+                var b2=node2.offsetTop+node2.offsetHeight;
+                if(r2<l1 || b2<t1 || l2>r1 || t2>b1){
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            function createBricks(n){
+                var oBrick=document.getElementById("brick");
+                for(var i=0;i<n;i++){
+                    var node=document.createElement("div");
+                    node.style.backgroundColor=randomColor();
+                    oBrick.appendChild(node);
+                }
+                var oBricks=oBrick.getElementsByTagName("div");
+                for(var i=0;i<oBricks.length;i++){
+                    oBricks[i].style.left=oBricks[i].offsetLeft+"px";
+                    oBricks[i].style.top=oBricks[i].offsetTop+"px";
+                }
+                for(var i=0;i<oBricks.length;i++){
+                    oBricks[i].style.position = 'absolute';
+                }
+
+            }
+            function drag(node) {
+                node.onmousedown=function(ev){
+                    var e=ev||window.event;
+                    var offsetX=e.clientX-node.offsetLeft-node.parentNode.offsetLeft;
+                    var offsetY=e.clientY-node.offsetTop-node.parentNode.offsetTop;
+
+                    document.onmousemove=function(ev){
+                        var e=ev||window.event;
+                        var l=e.clientX-offsetX-node.parentNode.offsetLeft;
+                        if(l<0){l=0}
+                        if(l>parseInt(getStyle(node.parentNode,"width"))-parseInt(getStyle(node,"width"))){
+                            l=parseInt(getStyle(node.parentNode,"width"))-parseInt(getStyle(node,"width"))
+
+                        }
+                            node.style.left=l+"px";
+                     }
+                     }
+                     node.onmouseup=function(){
+                            document.onmousemove="";
+                          }
+                 }
+                    
+            
+            window.onload=function(){
+                var oMain=document.getElementById("main");
+                var oBall=document.getElementById("ball");
+                var oBat=document.getElementById("bat")
+                var oBrick=document.getElementById("brick");
+                var oBricks=oBrick.getElementsByTagName("div");
+                createBricks(60);
+               
+                drag(oBat);
+                var speedX=parseInt(Math.random()*4+6);
+                var speedY=-parseInt(Math.random()*3+10);
+                var timer=setInterval(function(){
+                   oBall.style.left=oBall.offsetLeft+speedX+"px";
+                   oBall.style.top=oBall.offsetTop+speedY+"px";
+                   for(var i=0;i<oBricks.length;i++)
+                   {
+                     if(knock(oBall,oBricks[i]))  
+                     {
+                        speedY=speedY*(-1);
+                        oBrick.removeChild(oBricks[i]);
+                     }
+                   }
+                   if(oBall.offsetLeft>=520||oBall.offsetLeft<=0){
+                       speedX=speedX*(-1);
+                   }
+                   if(knock(oBat,oBall)||oBall.offsetTop<=0){
+                       speedY=speedY*(-1);
+                   }
+                  
+                   if(oBall.offsetTop>=530){
+                       alert("game over!");
+                       clearInterval(timer)
+                       window.location.reload();
+                   }
+                }, 30);
+
+            }
+        </script>
+    </head>
+    <body>
+        <div id="main">
+            <div id="ball"></div>
+            <div id="bat"></div>
+            <div id="brick"></div>
+        </div>
+    </body>
+</html>
