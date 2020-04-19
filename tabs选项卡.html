@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<style>
+		*{margin: 0px;padding: 0px;}
+		.box{width: 400px;height: 300px;margin: 30px auto;}
+		ul li{list-style: none;}
+		.nav>ul>li{width: 100px;height: 40px;line-height: 40px;float: left;background-color: #cccccc;text-align: center;}
+		.nav>ul>.current{background-color: indianred;cursor: pointer;}
+		.content>ul>li{display: none;}
+		.content>ul>li>img{width: 400px;height: 260px;}
+		.content>ul>.show{display: block;}
+	</style>
+	<script>
+		$(function(){
+			$(".nav>ul>li").mouseenter(function(){
+				$(this).addClass("current");
+				$(this).siblings().removeClass("current")
+				$(".content>ul>li").eq($(this).index()).addClass("show");
+				$(".content>ul>li").eq($(this).index()).siblings().removeClass("show");
+			})
+		})
+	</script>
+</head>
+<body>
+	<div class="box">
+		<div class="nav">
+			<ul>
+				<li class="current">电视剧1</li>
+				<li>电视剧2</li>
+				<li>电视剧3</li>
+				<li>电视剧4</li>
+			</ul>
+		</div>
+		<div class="content">
+			<ul>
+				<li class="show"><img src="./images//旋转木马素材1.jpg" alt=""></li>
+				<li><img src="./images//旋转木马素材2.jpg" alt=""></li>
+				<li><img src="./images//旋转木马素材3.jpg" alt=""></li>
+				<li><img src="./images//旋转木马素材4.jpg" alt=""></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
