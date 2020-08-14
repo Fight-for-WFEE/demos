@@ -1,4 +1,5 @@
-	$(document).on("click","a[ectype='sync_export_goods']",function(){
+代码1：
+$(document).on("click","a[ectype='sync_export_goods']",function(){
 		{
 			var content=`<div class="pb-bd"><div class="pb-ct">	<div class="pb-bd">
 									<div class="pb-ct"> 
@@ -94,4 +95,28 @@
 
 	}
 	});
+代码2：
+<?php
+        /**导出excel**/
+        header("Content-type:application/vnd.ms-excel");   //声明内容类型为excel
+        header("Content-Disposition:attachment;filename=excel导出.xls");  //content-disposition设置attachment为弹窗下载，inline时会内嵌浏览器显示，当然对jpg等文件有效，excel文件不能内嵌，可自行翻阅文档了解；filename定义文件名称与扩展名
+        echo "订单编号\t";
+        echo "用户名\t";
+        echo "商品名称\t";
+        echo "订单状态\t";
+        echo "支付方式\t";
+        echo "支付流水号\t";
+        echo "下单时间";
+
+        for($i=1; $i<=20;$i++){
+            echo "\n";
+            echo date("YmdHis").rand(1000,9999)." \t";
+            echo "第{$i}个用户\t";
+            echo "商品名称 $i\t";
+            echo "支付成功\t";
+            echo "微信支付\t";
+            echo uniqid()."\t";
+            echo date("Y-m-d H:i:s");
+        }
+
 	
